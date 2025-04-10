@@ -7,6 +7,7 @@ from computers import (
     LocalPlaywrightComputer,
     DockerComputer,
 )
+from computers.nottebrowser import NotteBrowser
 
 def acknowledge_safety_check_callback(message: str) -> bool:
     response = input(
@@ -27,6 +28,7 @@ def main():
             "browserbase",
             "scrapybara-browser",
             "scrapybara-ubuntu",
+            "notte-browser",
         ],
         help="Choose the computer environment to use.",
         default="local-playwright",
@@ -61,6 +63,7 @@ def main():
         "browserbase": BrowserbaseBrowser,
         "scrapybara-browser": ScrapybaraBrowser,
         "scrapybara-ubuntu": ScrapybaraUbuntu,
+        "notte-browser": NotteBrowser,
     }
 
     ComputerClass = computer_mapping[args.computer]
@@ -73,7 +76,7 @@ def main():
         items = []
 
 
-        if args.computer in ["browserbase", "local-playwright"]:
+        if args.computer in ["browserbase", "local-playwright", "notte-browser"]:
             if not args.start_url.startswith("http"):
                 args.start_url = "https://" + args.start_url
             agent.computer.goto(args.start_url)

@@ -50,17 +50,12 @@ class NotteBrowser(BasePlaywrightComputer):
         """
         # Create a session on Browserbase with specified parameters
         width, height = self.dimensions
-        self.session = self.notte.sessions.start()#proxies=self.proxy)
+        self.session = self.notte.sessions.start(proxies=[])
         info =self.notte.sessions.debug_info(self.session.session_id)
         
-        # Print the live session URL
-        print(
-            f"Watch and control this browser live at https://www.browserbase.com/sessions/{self.session.id}"
-        )
-
         # Connect to the remote session
         browser = self._playwright.chromium.connect_over_cdp(
-            info.debug_url,
+            info.ws_url,
             timeout=60000
         )
         context = browser.contexts[0]
@@ -110,7 +105,7 @@ class NotteBrowser(BasePlaywrightComputer):
 
         if self.session:
             print(
-                f"Session completed. View replay at https://browserbase.com/sessions/{self.session.id}"
+                f"Session completed. View replay at https://notte.com/sessions/{self.session.session_id}"
             )
 
     def screenshot(self) -> str:
@@ -125,7 +120,7 @@ class NotteBrowser(BasePlaywrightComputer):
             cdp_session = self._page.context.new_cdp_session(self._page)
 
             # Capture screenshot using CDP
-            result = notte..send("Page.captureScreenshot", {
+            result = cdp_session.send("Page.captureScreenshot", {
                 "format": "png",
                 "fromSurface": True
             })
