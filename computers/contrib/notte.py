@@ -71,7 +71,7 @@ class NotteBrowser(BasePlaywrightComputer):
 
 
         page = context.pages[0]
-        # page.on("close", self._handle_page_close)
+        page.on("close", self._handle_page_close)
 
         page.goto("https://bing.com")
 
@@ -81,7 +81,7 @@ class NotteBrowser(BasePlaywrightComputer):
         """Handle the creation of a new page."""
         print("New page created")
         self._page = page
-        # page.on("close", self._handle_page_close)
+        page.on("close", self._handle_page_close)
 
     def _handle_page_close(self, page: Page):
         """Handle the closure of a page."""
